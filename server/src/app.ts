@@ -20,7 +20,7 @@ import uploadRoute from './routes/uploadRoutes';
 import { webhookCheckout } from './controllers/bookingController';
 
 const app: Application = express();
-
+app.set('trust proxy', 1);
 //Global Middlewares
 
 // CORS Configuration
