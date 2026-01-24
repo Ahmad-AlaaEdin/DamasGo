@@ -5,7 +5,7 @@ import type { Tour } from "@/types/tour";
 
 interface BookingCardProps {
   tour: Tour;
-  onBook: () => void;
+  onBook: (quantity: number) => void;
   bookingLoading: boolean;
 }
 
@@ -15,10 +15,12 @@ export default function BookingCard({
   bookingLoading,
 }: BookingCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const maxParticipants = tour.maxGroupSize;
 
   return (
     <div
-      className="bg-white rounded-2xl shadow-lg p-6 sticky top-24 border"
+      className="bg-white rounded-2xl shadow-lg p-6 sticky top-28 border"
       style={{ borderColor: "#b9a779" }}
     >
       <div className="mb-6">
@@ -36,6 +38,31 @@ export default function BookingCard({
         )}
       </div>
 
+      <div className="mb-6 flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+        <span className="font-medium text-gray-700">Participants:</span>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setQuantity(Math.max(1, quantity - 1))}
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-white border shadow-sm hover:bg-gray-100 disabled:opacity-50 text-gray-700 font-bold"
+            disabled={quantity <= 1 || bookingLoading}
+            type="button"
+          >
+            -
+          </button>
+          <span className="w-6 text-center font-semibold text-lg">
+            {quantity}
+          </span>
+          <button
+            onClick={() => setQuantity(Math.min(maxParticipants, quantity + 1))}
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-white border shadow-sm hover:bg-gray-100 disabled:opacity-50 text-gray-700 font-bold"
+            disabled={quantity >= maxParticipants || bookingLoading}
+            type="button"
+          >
+            +
+          </button>
+        </div>
+      </div>
+
       <div className="space-y-3 mb-6">
         <Button
           className="w-full text-white shadow-lg"
@@ -43,10 +70,12 @@ export default function BookingCard({
             background: "linear-gradient(135deg, #428177 0%, #054239 100%)",
           }}
           size="lg"
-          onClick={onBook}
+          onClick={() => onBook(quantity)}
           disabled={bookingLoading}
         >
-          {bookingLoading ? "Processing..." : "Book Now"}
+          {bookingLoading
+            ? "Processing..."
+            : `Book for $${tour.price * quantity}`}
         </Button>
 
         <div className="grid grid-cols-2 gap-2">

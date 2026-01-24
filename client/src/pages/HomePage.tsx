@@ -5,6 +5,7 @@ import { getTours } from "@/services/toursService";
 import PageHero from "@/components/home/PageHero";
 import TourLoadingSkeleton from "@/components/home/TourLoadingSkeleton";
 import ToursEmptyState from "@/components/home/ToursEmptyState";
+
 export default function HomePage() {
   const [selectedFilter] = useState<string>("All Tours");
   const [tours, setTours] = useState<Tour[]>([]);
@@ -41,7 +42,7 @@ export default function HomePage() {
         });
 
   return (
-    <main className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <div className="container-page py-8 sm:py-12">
       <PageHero />
 
       {/* <FilterBar
@@ -78,6 +79,6 @@ export default function HomePage() {
           ></div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

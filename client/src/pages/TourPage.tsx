@@ -1,7 +1,7 @@
 import { getTourById } from "@/services/toursService";
 import { bookTour } from "@/services/bookingService";
 import type { Tour, DifficultyDisplay } from "@/types/tour";
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useEmblaCarousel from "embla-carousel-react";
 import { MapPin, Check, ArrowLeft } from "lucide-react";
@@ -12,67 +12,6 @@ import { toast } from "sonner";
 import Reviews from "@/components/Reviews";
 import HeroSection from "@/components/tour/HeroSection";
 import BookingCard from "@/components/tour/BookingCard";
-
-interface LazyImageProps {
-  src: string;
-  alt: string;
-  className?: string;
-  placeholderColor?: string;
-}
-
-function LazyImage({
-  src,
-  alt,
-  className = "",
-  placeholderColor = "#f0f0f0",
-}: LazyImageProps) {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [isInView, setIsInView] = useState(false);
-  const imgRef = useRef<HTMLImageElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsInView(true);
-            observer.disconnect();
-          }
-        });
-      },
-      {
-        rootMargin: "50px", // Start loading when image is 50px away from viewport
-      },
-    );
-
-    if (imgRef.current) {
-      observer.observe(imgRef.current);
-    }
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  return (
-    <div className="relative w-full h-full">
-      {!isLoaded && (
-        <div
-          className="absolute inset-0 animate-pulse"
-          style={{ backgroundColor: placeholderColor }}
-        />
-      )}
-      <img
-        ref={imgRef}
-        src={isInView ? src : undefined}
-        alt={alt}
-        className={`${className} transition-opacity duration-500 ${isLoaded ? "opacity-100" : "opacity-0"}`}
-        onLoad={() => setIsLoaded(true)}
-        loading="lazy"
-      />
-    </div>
-  );
-}
 
 interface ThumbnailGalleryProps {
   images: string[];
@@ -125,11 +64,11 @@ function ThumbnailGallery({ images, tourName }: ThumbnailGalleryProps) {
                   boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
                 }}
               >
-                <LazyImage
+                <img
                   src={image}
                   alt={`${tourName} - Image ${index + 1}`}
                   className="w-full h-full object-cover"
-                  placeholderColor="rgba(66, 129, 119, 0.1)"
+                  loading="lazy"
                 />
 
                 <div
@@ -164,11 +103,11 @@ function ThumbnailGallery({ images, tourName }: ThumbnailGalleryProps) {
                 }`}
                 style={{}}
               >
-                <LazyImage
+                <img
                   src={image}
                   alt={`${tourName} - Thumbnail ${index + 1}`}
                   className="w-full h-full object-cover"
-                  placeholderColor="rgba(66, 129, 119, 0.1)"
+                  loading="lazy"
                 />
                 {index !== selectedIndex && (
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors duration-300" />
@@ -240,7 +179,7 @@ export default function TourPage() {
     return "TBA";
   };
 
-  const handleBooking = async () => {
+  const handleBooking = async (quantity: number) => {
     if (!isAuthenticated) {
       toast.error("Please log in to book a tour", {
         description: "You need to be logged in to make a booking.",
@@ -259,7 +198,7 @@ export default function TourPage() {
     try {
       setBookingLoading(true);
       toast.loading("Redirecting to checkout...");
-      await bookTour(id);
+      await bookTour(id, quantity);
     } catch (error: any) {
       toast.dismiss();
       toast.error("Booking failed", {
@@ -287,7 +226,7 @@ export default function TourPage() {
 
   if (!tour) {
     return (
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center shrink">
+      <div className="container-page py-16 text-center">
         <h1 className="text-4xl font-bold mb-4" style={{ color: "#3d3a3b" }}>
           Tour not found
         </h1>
@@ -320,7 +259,7 @@ export default function TourPage() {
         getFormattedDate={getFormattedDate}
       />
 
-      <div className="max-w-[1400px] mx-auto w-full px-4 sm:px-24 lg:px-8 mt-16">
+      <div className="container-page w-full mt-16">
         <div className="grid grid-cols-1 lg:grid-cols-3  -mt-16 relative">
           <div className="lg:col-span-2">
             <div
@@ -444,7 +383,7 @@ export default function TourPage() {
             </div>
           </div>
 
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 mt-8">
             <BookingCard
               tour={tour}
               onBook={handleBooking}

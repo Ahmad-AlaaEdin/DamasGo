@@ -6,22 +6,16 @@ import {
   Youtube,
   Mail,
   MapPin,
-  Phone,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Container from "@/components/layout/Container";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer
-      className="border-t pt-12 pb-8"
-      style={{
-        backgroundColor: "#f8f7f4",
-        borderTopColor: "rgba(185, 167, 121, 0.3)",
-      }}
-    >
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+    <footer className="border-t pt-12 pb-8 bg-brand-bg border-brand-secondary/30">
+      <Container>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
           <div className="space-y-4">
             <Link to="/" className="inline-block">
@@ -31,8 +25,8 @@ const Footer = () => {
                 className="w-48 opacity-90 hover:opacity-100 transition-opacity"
               />
             </Link>
-            <p className="text-sm leading-relaxed" style={{ color: "#6b6768" }}>
-              Discover the world's most exciting adventures with Natours.
+            <p className="text-sm leading-relaxed text-brand-text">
+              Discover the world's most exciting adventures with DamasGo.
               Unforgettable tours led by expert guides in breathtaking
               locations.
             </p>
@@ -42,11 +36,7 @@ const Footer = () => {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-full transition-all duration-200 hover:scale-110"
-                style={{
-                  backgroundColor: "#edebe0",
-                  color: "#428177",
-                }}
+                className="p-2 rounded-full transition-all duration-200 hover:scale-110 bg-brand-accent text-brand-primary"
                 aria-label="Facebook"
               >
                 <Facebook className="h-4 w-4" />
@@ -55,11 +45,7 @@ const Footer = () => {
                 href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-full transition-all duration-200 hover:scale-110"
-                style={{
-                  backgroundColor: "#edebe0",
-                  color: "#428177",
-                }}
+                className="p-2 rounded-full transition-all duration-200 hover:scale-110 bg-brand-accent text-brand-primary"
                 aria-label="Twitter"
               >
                 <Twitter className="h-4 w-4" />
@@ -68,11 +54,7 @@ const Footer = () => {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-full transition-all duration-200 hover:scale-110"
-                style={{
-                  backgroundColor: "#edebe0",
-                  color: "#428177",
-                }}
+                className="p-2 rounded-full transition-all duration-200 hover:scale-110 bg-brand-accent text-brand-primary"
                 aria-label="Instagram"
               >
                 <Instagram className="h-4 w-4" />
@@ -81,11 +63,7 @@ const Footer = () => {
                 href="https://youtube.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-full transition-all duration-200 hover:scale-110"
-                style={{
-                  backgroundColor: "#edebe0",
-                  color: "#428177",
-                }}
+                className="p-2 rounded-full transition-all duration-200 hover:scale-110 bg-brand-accent text-brand-primary"
                 aria-label="YouTube"
               >
                 <Youtube className="h-4 w-4" />
@@ -94,10 +72,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h3
-              className="font-semibold text-base mb-4"
-              style={{ color: "#3d3a3b" }}
-            >
+            <h3 className="font-semibold text-base mb-4 text-brand-dark">
               Quick Links
             </h3>
             <ul className="space-y-3">
@@ -111,14 +86,10 @@ const Footer = () => {
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-sm transition-colors duration-200 inline-block relative group"
-                    style={{ color: "#6b6768" }}
+                    className="text-sm transition-colors duration-200 inline-block relative group text-brand-text"
                   >
                     {link.label}
-                    <span
-                      className="absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full"
-                      style={{ backgroundColor: "#428177" }}
-                    ></span>
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full bg-brand-primary"></span>
                   </Link>
                 </li>
               ))}
@@ -126,10 +97,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h3
-              className="font-semibold text-base mb-4"
-              style={{ color: "#3d3a3b" }}
-            >
+            <h3 className="font-semibold text-base mb-4 text-brand-dark">
               Support
             </h3>
             <ul className="space-y-3">
@@ -143,14 +111,10 @@ const Footer = () => {
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-sm transition-colors duration-200 inline-block relative group"
-                    style={{ color: "#6b6768" }}
+                    className="text-sm transition-colors duration-200 inline-block relative group text-brand-text"
                   >
                     {link.label}
-                    <span
-                      className="absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full"
-                      style={{ backgroundColor: "#428177" }}
-                    ></span>
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full bg-brand-primary"></span>
                   </Link>
                 </li>
               ))}
@@ -158,81 +122,36 @@ const Footer = () => {
           </div>
 
           <div>
-            <h3
-              className="font-semibold text-base mb-4"
-              style={{ color: "#3d3a3b" }}
-            >
+            <h3 className="font-semibold text-base mb-4 text-brand-dark">
               Get in Touch
             </h3>
             <div className="space-y-3 mb-6">
               <div className="flex items-start gap-2">
-                <MapPin
-                  className="h-4 w-4 mt-0.5 shrink-0"
-                  style={{ color: "#428177" }}
-                />
-                <p className="text-sm" style={{ color: "#6b6768" }}>
-                  123 Adventure Street, Travel City, TC 12345
-                </p>
+                <MapPin className="h-4 w-4 mt-0.5 shrink-0 text-brand-primary" />
+                <p className="text-sm text-brand-text">Damascus, Syria</p>
               </div>
               <div className="flex items-center gap-2">
-                <Phone
-                  className="h-4 w-4 shrink-0"
-                  style={{ color: "#428177" }}
-                />
+                <Mail className="h-4 w-4 shrink-0 text-brand-primary" />
                 <a
-                  href="tel:+1234567890"
-                  className="text-sm transition-colors"
-                  style={{ color: "#6b6768" }}
+                  href="mailto:hello@damasgo.com"
+                  className="text-sm transition-colors text-brand-text"
                 >
-                  +1 (234) 567-890
-                </a>
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail
-                  className="h-4 w-4 shrink-0"
-                  style={{ color: "#428177" }}
-                />
-                <a
-                  href="mailto:hello@natours.com"
-                  className="text-sm transition-colors"
-                  style={{ color: "#6b6768" }}
-                >
-                  hello@DamasGo.com
+                  hello@damasgo.com
                 </a>
               </div>
             </div>
 
             <div>
-              <h4
-                className="font-medium text-sm mb-3"
-                style={{ color: "#3d3a3b" }}
-              >
+              <h4 className="font-medium text-sm mb-3 text-brand-dark">
                 Subscribe to Newsletter
               </h4>
               <div className="flex gap-2">
                 <input
                   type="email"
                   placeholder="Your email"
-                  className="flex-1 px-3 py-2 text-sm rounded-md border focus:outline-none focus:ring-2 transition-all"
-                  style={{
-                    borderColor: "#b9a779",
-                    backgroundColor: "white",
-                    color: "#3d3a3b",
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = "#428177";
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = "#b9a779";
-                  }}
+                  className="flex-1 px-3 py-2 text-sm rounded-md border border-brand-secondary bg-white text-brand-dark focus:outline-none focus:ring-2 focus:border-brand-primary transition-all"
                 />
-                <Button
-                  className="px-4 text-white shadow-lg hover:shadow-xl transition-all duration-200"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #428177 0%, #054239 100%)",
-                  }}
-                >
+                <Button className="px-4 text-white shadow-lg hover:shadow-xl transition-all duration-200 bg-linear-to-br from-brand-primary to-brand-primary-dark">
                   <Mail className="h-4 w-4" />
                 </Button>
               </div>
@@ -240,13 +159,10 @@ const Footer = () => {
           </div>
         </div>
 
-        <div
-          className="pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4"
-          style={{ borderTopColor: "rgba(185, 167, 121, 0.3)" }}
-        >
-          <p className="text-sm" style={{ color: "#6b6768" }}>
-            © {currentYear} Natours. Created by{" "}
-            <span style={{ color: "#428177" }} className="font-medium">
+        <div className="pt-8 border-t border-brand-secondary/30 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-brand-text">
+            © {currentYear} DamasGo. Created by{" "}
+            <span className="font-medium text-brand-primary">
               Ahmad Alaa Eddin
             </span>
             . All rights reserved.
@@ -254,21 +170,19 @@ const Footer = () => {
           <div className="flex gap-6">
             <Link
               to="/terms"
-              className="text-sm transition-colors duration-200"
-              style={{ color: "#6b6768" }}
+              className="text-sm transition-colors duration-200 text-brand-text"
             >
               Terms of Service
             </Link>
             <Link
               to="/privacy"
-              className="text-sm transition-colors duration-200"
-              style={{ color: "#6b6768" }}
+              className="text-sm transition-colors duration-200 text-brand-text"
             >
               Privacy Policy
             </Link>
           </div>
         </div>
-      </div>
+      </Container>
     </footer>
   );
 };

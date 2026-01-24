@@ -3,6 +3,7 @@ import { MapPin, Calendar, Clock, Users, Star, ArrowLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Tour } from "@/types/tour";
+import Container from "@/components/layout/Container";
 
 interface HeroSectionProps {
   tour: Tour;
@@ -46,7 +47,7 @@ export default function HeroSection({
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 p-8">
-        <div className="max-w-[1400px] mx-auto">
+        <Container className="w-full">
           <div className="flex flex-wrap items-center gap-3 mb-4">
             <Badge
               className="border backdrop-blur-sm"
@@ -93,7 +94,7 @@ export default function HeroSection({
               <span>{tour.maxGroupSize} people</span>
             </div>
           </div>
-        </div>
+        </Container>
       </div>
     </div>
   );

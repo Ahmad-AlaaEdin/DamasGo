@@ -17,7 +17,7 @@ export default function BookingSuccessPage() {
   }, [searchParams]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
+    <div className="container-page min-h-screen flex items-center justify-center px-4">
       <div className="max-w-md w-full text-center">
         <div className="mb-6 flex justify-center">
           <div

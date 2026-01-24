@@ -8,10 +8,13 @@ export interface CheckoutSessionResponse {
   };
 }
 
-export async function bookTour(tourId: string): Promise<void> {
+export async function bookTour(
+  tourId: string,
+  quantity: number = 1,
+): Promise<void> {
   try {
     const response = await axiosInstance.get<CheckoutSessionResponse>(
-      `/booking/checkout-session/${tourId}`
+      `/booking/checkout-session/${tourId}?quantity=${quantity}`,
     );
 
     const sessionUrl = response.data.session.url;
@@ -26,7 +29,7 @@ export async function bookTour(tourId: string): Promise<void> {
     throw new Error(
       error.response?.data?.message ||
         error.message ||
-        "Failed to process booking"
+        "Failed to process booking",
     );
   }
 }
@@ -38,7 +41,7 @@ export async function getMyBookings() {
   } catch (error: any) {
     console.error("Error fetching bookings:", error);
     throw new Error(
-      error.response?.data?.message || "Failed to fetch bookings"
+      error.response?.data?.message || "Failed to fetch bookings",
     );
   }
 }
