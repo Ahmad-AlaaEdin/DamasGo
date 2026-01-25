@@ -4,6 +4,7 @@ interface IBooking {
   user: mongoose.Types.ObjectId;
   tour: mongoose.Types.ObjectId;
   price: number;
+  quantity: number;
   createdAt: Date;
   paid: boolean;
 }
@@ -25,6 +26,10 @@ const bookingSchema = new Schema<BookingDocument>(
     price: {
       type: Number,
       required: [true, 'Booking must have a Price'],
+    },
+    quantity: {
+      type: Number,
+      default: 1,
     },
 
     createdAt: { type: Date, default: Date.now },

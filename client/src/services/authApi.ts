@@ -29,10 +29,10 @@ export const authApi = {
   },
 
   getCurrentUser: async (): Promise<User> => {
-    const response = await axiosInstance.get<{ data: { data: User } }>(
+    const response = await axiosInstance.get<{ data: User; status: string }>(
       "/users/me",
     );
-    return response.data.data.data;
+    return response.data.data;
   },
 
   updatePassword: async (data: UpdatePasswordData): Promise<AuthResponse> => {
@@ -65,10 +65,10 @@ export const authApi = {
 
   verifyAuth: async (): Promise<User | null> => {
     try {
-      const response = await axiosInstance.get<{ data: { user: User } }>(
+      const response = await axiosInstance.get<{ data: User; status: string }>(
         "/users/me",
       );
-      return response.data.data.user;
+      return response.data.data;
     } catch (error) {
       return null;
     }

@@ -25,12 +25,31 @@ const stripe = new Stripe(stripeConfig.secretKey, {
 
 export const getCheckoutSession = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    // 1) Get the currently booked tour
     const tour = await Tour.findById(req.params.tourId);
+    const quantity = Number(req.query.quantity) || 1;
 
     if (!tour) {
       return next(new AppError('Tour not found', 404));
     }
 
+    // 2) Check if there is enough space
+    const bookings = await Booking.find({ tour: req.params.tourId });
+    const currentBooked = bookings.reduce(
+      (acc, booking) => acc + (booking.quantity || 1),
+      0,
+    );
+
+    if (currentBooked + quantity > tour.maxGroupSize) {
+      return next(
+        new AppError(
+          `Sorry, only ${tour.maxGroupSize - currentBooked} spots left for this tour.`,
+          400,
+        ),
+      );
+    }
+
+    // 3) Create checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
 
@@ -44,6 +63,7 @@ export const getCheckoutSession = catchAsync(
         userId: req.user!.id,
         tourId: req.params.tourId,
         tourPrice: tour.price.toString(),
+        quantity: quantity.toString(),
       },
       line_items: [
         {
@@ -56,7 +76,7 @@ export const getCheckoutSession = catchAsync(
             },
             unit_amount: tour.price * 100, // Price in cents
           },
-          quantity: 1,
+          quantity: quantity,
         },
       ],
     });
@@ -109,6 +129,7 @@ export const webhookCheckout = catchAsync(
           tour: tourId,
           user: userId,
           price: Number(price),
+          quantity: Number(session.metadata?.quantity || 1),
         });
       }
     }

@@ -79,7 +79,7 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100 py-8 px-4">
-      <div className="max-w-6xl mx-auto">
+      <div className="container-page">
         <div className="mb-8">
           <h1 className="text-4xl font-bold bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
             My Profile

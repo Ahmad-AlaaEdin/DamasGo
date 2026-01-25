@@ -4,7 +4,17 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  /* Custom theme configuration can go here */
+  /* DamasGo Brand Colors */
+  --color-brand-dark: #3d3a3b;
+  --color-brand-primary: #428177;
+  --color-brand-primary-dark: #054239;
+  --color-brand-secondary: #b9a779;
+  --color-brand-secondary-dark: #988561;
+  --color-brand-accent: #edebe0;
+  --color-brand-bg: #f8f7f4;
+  --color-brand-burgundy: #6b1f2a;
+  --color-brand-text: #6b6768;
+  --color-brand-forest: #002623;
 }
 
 @theme inline {
@@ -196,5 +206,11 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .container-page {
+    @apply max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8;
   }
 }

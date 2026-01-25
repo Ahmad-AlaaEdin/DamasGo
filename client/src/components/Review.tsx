@@ -1,9 +1,15 @@
 import { useState } from "react";
 import type { ReviewWithUser } from "@/types/review";
-import { Star, Edit, Trash2, Save, X } from "lucide-react";
+import { Star, Edit, Trash2, Save, X, MoreVertical } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { updateReview, deleteReview } from "@/services/reviewsService";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import type { CreateReviewData } from "@/types/review";
 
 interface ReviewProps {
@@ -143,7 +149,7 @@ export default function Review({
   const handleDelete = async () => {
     if (
       !confirm(
-        "Are you sure you want to delete this review? This action cannot be undone."
+        "Are you sure you want to delete this review? This action cannot be undone.",
       )
     ) {
       return;
@@ -199,36 +205,9 @@ export default function Review({
                 <StarRating rating={review.rating} />
               )}
             </div>
-            <div className="flex items-center gap-2">
-              <time className="text-sm text-gray-500">
-                {formatDate(review.createdAt)}
-              </time>
-              {isOwnReview && !isEditing && !isDeleting && (
-                <>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleEdit}
-                    className="h-8 px-2 border-gray-300 hover:bg-gray-50"
-                  >
-                    <Edit className="h-3.5 w-3.5" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleDelete}
-                    disabled={isDeleting}
-                    className="h-8 px-2 border-red-300 text-red-600 hover:bg-red-50"
-                  >
-                    {isDeleting ? (
-                      <div className="w-3.5 h-3.5 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />
-                    ) : (
-                      <Trash2 className="h-3.5 w-3.5" />
-                    )}
-                  </Button>
-                </>
-              )}
-            </div>
+            <time className="text-sm text-gray-500">
+              {formatDate(review.createdAt)}
+            </time>
           </div>
 
           {isEditing ? (
@@ -283,9 +262,48 @@ export default function Review({
               </div>
             </div>
           ) : (
-            <p className="text-gray-700 leading-relaxed mt-3">
-              {review.review}
-            </p>
+            <div className="flex items-start gap-3 mt-3">
+              <p className="text-gray-700 leading-relaxed flex-1">
+                {review.review}
+              </p>
+              {isOwnReview && !isDeleting && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8 w-8 p-0 border-gray-300 hover:bg-gray-50 shrink-0"
+                    >
+                      <MoreVertical className="h-4 w-4" />
+                      <span className="sr-only">Open menu</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={handleEdit}>
+                      <Edit className="h-4 w-4 mr-2" />
+                      Edit
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      variant="destructive"
+                      onClick={handleDelete}
+                      disabled={isDeleting}
+                    >
+                      {isDeleting ? (
+                        <>
+                          <div className="w-4 h-4 mr-2 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />
+                          Deleting...
+                        </>
+                      ) : (
+                        <>
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          Delete
+                        </>
+                      )}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+            </div>
           )}
         </div>
       </div>
