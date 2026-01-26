@@ -12,7 +12,7 @@ if (!baseURL.startsWith("http://") && !baseURL.startsWith("https://")) {
 }
 
 const axiosInstance = axios.create({
-  baseURL,
+  baseURL: `${baseURL}${baseURL.includes("/api/v1") ? "" : "/api/v1"}`,
   timeout: 10000,
   withCredentials: true,
   headers: {
@@ -42,9 +42,6 @@ axiosInstance.interceptors.response.use(
   (error: AxiosError) => {
     if (error.response?.status === 401) {
       removeToken();
-      if (!window.location.pathname.includes("/login")) {
-        window.location.href = "/login";
-      }
     }
 
     if (error.response?.status === 403) {
