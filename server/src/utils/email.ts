@@ -73,7 +73,7 @@ class Email {
 
     // 2) Define email options
     const mailOptions = {
-      from: 'obadagh014@gmail.com',
+      from: 'ahmadalaaelddin@gmail.com',
       to: this.to,
       subject,
       html,
