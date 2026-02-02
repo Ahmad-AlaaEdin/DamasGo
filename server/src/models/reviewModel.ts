@@ -79,12 +79,11 @@ reviewSchema.post(/^findOneAnd/, async function (doc: ReviewDocument) {
 
 reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
 
-reviewSchema.pre(/^find/, function (this: mongoose.Query<any, any>, next) {
+reviewSchema.pre(/^find/, function (this: mongoose.Query<any, any>) {
   this.populate({
     path: 'user',
     select: 'name photo',
   });
-  next();
 });
 
 const Review: IReviewStatics = mongoose.model<ReviewDocument, IReviewStatics>(

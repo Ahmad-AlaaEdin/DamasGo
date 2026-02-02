@@ -156,24 +156,21 @@ tourSchema.virtual('reviews', {
   localField: '_id',
 });
 
-tourSchema.pre(/^find/, function (this: mongoose.Query<any, any>, next) {
+tourSchema.pre(/^find/, function (this: mongoose.Query<any, any>) {
   this.find({ secretTour: { $ne: true } });
-  next();
 });
 
-tourSchema.pre('save', function (next) {
+tourSchema.pre('save', function () {
   this.slug = slugify(this.name, { lower: true });
-  next();
 });
 
 tourSchema.index({ startLocation: '2dsphere' });
 
-tourSchema.pre(/^find/, function (this: mongoose.Query<any, any>, next) {
+tourSchema.pre(/^find/, function (this: mongoose.Query<any, any>) {
   this.populate({
     path: 'guides',
     select: '-__v -passwordChangedAt',
   });
-  next();
 });
 
 const Tour: Model<TourDocument> = mongoose.model<TourDocument>(

@@ -1,4 +1,8 @@
-import mongoose, { Document, Schema, Model } from 'mongoose';
+import mongoose, {
+  Document,
+  Schema,
+  Model,
+} from 'mongoose';
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
@@ -70,25 +74,24 @@ const userSchema = new Schema<UserDocument>({
   },
 });
 
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) next();
+userSchema.pre<UserDocument>('save', async function () {
+  if (!this.isModified('password')) return;
 
   this.password = await bcrypt.hash(this.password, 12);
   this.passwordConfirm = undefined;
-  next();
 });
 
-userSchema.pre(/^find/, function (this: mongoose.Query<any, any>, next) {
-  this.find({ active: { $ne: false } });
+userSchema.pre<mongoose.Query<any, any>>(
+  /^find/,
+  function () {
+    this.find({ active: { $ne: false } });
+  },
+);
 
-  next();
-});
-
-userSchema.pre('save', function (next) {
-  if (!this.isModified('password') || this.isNew) return next();
+userSchema.pre<UserDocument>('save', function () {
+  if (!this.isModified('password') || this.isNew) return;
 
   this.passwordChangedAt = new Date(Date.now());
-  next();
 });
 
 userSchema.methods.checkPassword = async function (
