@@ -87,8 +87,7 @@ export const signup = catchAsync(
       password: req.body.password,
       passwordConfirm: req.body.passwordConfirm,
     });
-    const url = `${req.protocol}://${req.get('host')}/me`;
-    await new Email(newUser, url).sendWelcome();
+
 
     sendToken(newUser, 201, res);
   },
@@ -178,9 +177,8 @@ export const forgotPassword = catchAsync(
 
     // 3) Send it to user's email
     try {
-      const resetURL = `${req.protocol}://${req.get(
-        'host',
-      )}/api/v1/users/resetPassword/${resetToken}`;
+      const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+      const resetURL = `${clientUrl}/reset-password/${resetToken}`;
       await new Email(user, resetURL).sendPasswordReset();
 
       res.status(200).json({
@@ -207,7 +205,7 @@ export const resetPassword = catchAsync(
     //Get user based on Token
     const hashedToken = crypto
       .createHash('sha256')
-      .update(req.params.token)
+      .update(req.params.token as string)
       .digest('hex');
 
     const user = await User.findOne({

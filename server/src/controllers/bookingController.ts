@@ -6,7 +6,6 @@ import AppError from '../utils/appError';
 import catchAsync from '../utils/catchAsync';
 import * as factory from './handlerFactory';
 
-// Stripe configuration following Rule 3: readonly for config objects
 type StripeConfig = {
   readonly secretKey: string;
 };
@@ -50,11 +49,12 @@ export const getCheckoutSession = catchAsync(
     }
 
     // 3) Create checkout session
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
+    const clientUrl =
+      process.env.CLIENT_URL || req.get('origin') || 'http://localhost:5173';
 
-      success_url: `${process.env.CLIENT_URL || 'http://localhost:5173'}/booking-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.CLIENT_URL || 'http://localhost:5173'}/tour/${tour._id}`,
+    const session = await stripe.checkout.sessions.create({
+      success_url: `${clientUrl}/booking-success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${clientUrl}/tour/${tour._id}`,
       mode: 'payment',
       customer_email: req.user!.email,
       client_reference_id: req.params.tourId,
@@ -72,14 +72,14 @@ export const getCheckoutSession = catchAsync(
             product_data: {
               name: `${tour.name} Tour`,
               description: tour.summary,
-              images: [`https://www.natours.dev/img/tours/${tour.imageCover}`],
+              images: [tour.imageCover],
             },
             unit_amount: tour.price * 100, // Price in cents
           },
           quantity: quantity,
         },
       ],
-    });
+    } as any);
 
     res.status(200).json({
       message: 'success',

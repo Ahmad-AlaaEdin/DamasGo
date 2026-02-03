@@ -48,17 +48,11 @@ const helmetConfig = {
       ],
       connectSrc: [
         "'self'",
-        'http://127.0.0.1:8000',
-        'http://192.168.1.38:8000',
-        'http://172.18.0.1:8000',
         'https://api.stripe.com/',
         'https://api.cloudinary.com',
-        'ws://localhost:56046',
-        'ws://127.0.0.1:56046',
-        'ws://127.0.0.1:57232/',
         'https://*',
       ],
-      'frame-src': ['self', 'https://*.stripe.com'],
+      'frame-src': ["'self'", 'https://*.stripe.com'],
       'style-src': [
         "'self'",
         'https://*.googleapis.com',

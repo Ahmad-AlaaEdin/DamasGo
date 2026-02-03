@@ -21,8 +21,7 @@ router.patch(
 router.get(
   '/me',
 
-  userController.getMe,
-  userController.getUser,
+  userController.getMyProfile,
 );
 router.patch('/updateMe', userController.updateMe);
 router.post('/update-avatar', userController.updateAvatar);

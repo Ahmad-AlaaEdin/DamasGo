@@ -66,7 +66,7 @@ export const getMonthlyPlan = catchAsync(
 export const getToursWithin = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { distance, latlng, unit } = req.params;
-    const [lat, lng] = latlng.split(',');
+    const [lat, lng] = (latlng as string).split(',');
 
     const radius =
       unit == 'mi' ? Number(distance) / 3963.2 : Number(distance) / 6378.1;
@@ -99,7 +99,7 @@ export const getToursWithin = catchAsync(
 export const getDistances = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { latlng, unit } = req.params;
-    const [lat, lng] = latlng.split(',');
+    const [lat, lng] = (latlng as string).split(',');
 
     const multiplier = unit === 'mi' ? 0.000621371 : 0.001;
 

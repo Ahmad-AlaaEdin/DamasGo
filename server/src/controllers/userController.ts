@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import User from './../models/userModel';
+import Review from './../models/reviewModel';
 import AppError from './../utils/appError';
 import catchAsync from './../utils/catchAsync';
 import * as factory from './../controllers/handlerFactory';
@@ -50,10 +51,6 @@ export const deleteMe = catchAsync(
   },
 );
 
-/**
- * Update user's profile picture with Cloudinary URL
- * POST /api/users/update-avatar
- */
 export const updateAvatar = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { imageUrl } = req.body;
@@ -62,7 +59,6 @@ export const updateAvatar = catchAsync(
       return next(new AppError('Please provide an image URL', 400));
     }
 
-    // Update the user's photo field with the Cloudinary URL
     const user = await User.findByIdAndUpdate(
       req.user!.id,
       { photo: imageUrl },
@@ -100,6 +96,31 @@ export const getMe = (
   req.params.id = req.user!.id;
   next();
 };
+
+export const getMyProfile = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+
+    const user = await User.findById(req.user!.id);
+
+    if (!user) {
+      return next(new AppError('No user found with that ID', 404));
+    }
+
+
+    const reviewsWritten = await Review.countDocuments({ user: req.user!.id });
+
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        user: {
+          ...user.toObject(),
+          reviewsWritten,
+        },
+      },
+    });
+  },
+);
 
 export const getUser = factory.getOne(User);
 export const getAllUsers = factory.getAll(User);
