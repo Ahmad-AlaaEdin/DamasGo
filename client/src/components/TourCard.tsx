@@ -141,13 +141,8 @@ export default function TourCard({ tour }: TourCardProps) {
         </div>
 
         <Button
-          className="w-full text-white shadow-md group-hover:shadow-lg transition-all duration-200"
-          style={{
-            background: "linear-gradient(135deg, #428177 0%, #054239 100%)",
-            boxShadow: isHovered
-              ? "0 10px 25px -5px rgba(66, 129, 119, 0.4)"
-              : undefined,
-          }}
+          variant="primary"
+          className="w-full transition-all duration-200"
           onClick={(e) => {
             e.stopPropagation();
             navigate(`/tour/${tour._id}`);
@@ -155,9 +150,8 @@ export default function TourCard({ tour }: TourCardProps) {
         >
           <span>Explore Tour</span>
           <ArrowRight
-            className={`h-4 w-4 transition-transform duration-300 ${
-              isHovered ? "translate-x-1" : ""
-            }`}
+            className={`h-4 w-4 transition-transform duration-300 ${isHovered ? "translate-x-1" : ""
+              }`}
           />
         </Button>
       </div>

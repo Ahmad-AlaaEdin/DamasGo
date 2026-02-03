@@ -9,6 +9,8 @@ import ProfilePage from "@/pages/ProfilePage";
 import { Toaster } from "sonner";
 import TourPage from "./pages/TourPage";
 import BookingSuccessPage from "./pages/BookingSuccessPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 function App() {
   return (
@@ -17,6 +19,11 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route
+            path="/reset-password/:token"
+            element={<ResetPasswordPage />}
+          />
 
           <Route element={<Layout />}>
             <Route path="/" element={<HomePage />} />

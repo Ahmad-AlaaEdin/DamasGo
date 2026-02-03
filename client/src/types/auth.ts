@@ -5,6 +5,7 @@ export interface User {
   photo?: string;
   role: "user" | "guide" | "lead-guide" | "admin";
   active?: boolean;
+  reviewsWritten?: number;
 }
 
 export interface AuthResponse {

@@ -27,12 +27,16 @@ export default function Header() {
                 onClick={() => navigate("/profile")}
               >
                 <img
-                  src={user.photo || "/img/default.png"}
+                  src={
+                    user.photo?.startsWith("http")
+                      ? user.photo
+                      : "/img/default.png"
+                  }
                   alt={user.name}
-                  className="w-8 h-8 rounded-full object-cover border border-brand-primary/50"
+                  className="w-8 h-8 rounded-full object-cover"
                 />
                 <span className="font-medium text-sm">
-                  {user.name.split(" ")[0]}
+                  {user.name?.split(" ")[0]}
                 </span>
               </Button>
             ) : (

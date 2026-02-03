@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { authApi } from "@/services/authApi";
+import { setToken } from "@/utils/token";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,7 +24,7 @@ import { getMyBookings } from "@/services/bookingService";
 import type { Booking } from "@/types/booking";
 
 export default function ProfilePage() {
-  const { user, logout } = useAuth();
+  const { user, logout, updateUser } = useAuth();
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
   const [name, setName] = useState(user?.name || "");
@@ -55,17 +57,35 @@ export default function ProfilePage() {
     setIsEditingProfile(false);
   };
 
-  const handlePasswordUpdate = (e: React.FormEvent) => {
+  const handlePasswordUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
       alert("Passwords don't match!");
       return;
     }
-    console.log("Updating password");
-    setIsEditingPassword(false);
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
+
+    try {
+      const response = await authApi.updatePassword({
+        currentPassword,
+        password: newPassword,
+        passwordConfirm: confirmPassword,
+      });
+
+      if (response.status === "success" && response.token) {
+        setToken(response.token);
+        if (response.data?.user) {
+          updateUser(response.data.user);
+        }
+        alert("Password updated successfully!");
+        setIsEditingPassword(false);
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+      }
+    } catch (error: any) {
+      console.error("Error updating password:", error);
+      alert(error.response?.data?.message || "Failed to update password");
+    }
   };
 
   const handleLogout = async () => {
@@ -74,7 +94,7 @@ export default function ProfilePage() {
 
   const userStats = {
     toursBooked: bookings.length,
-    reviewsWritten: 8,
+    reviewsWritten: user?.reviewsWritten || 0,
   };
 
   return (
@@ -147,9 +167,7 @@ export default function ProfilePage() {
             <div className="bg-white rounded-2xl shadow-lg p-8">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-emerald-100 rounded-lg">
-                    <User className="h-5 w-5 text-emerald-600" />
-                  </div>
+
                   <h3 className="text-xl font-semibold text-slate-800">
                     Profile Information
                   </h3>
@@ -202,7 +220,8 @@ export default function ProfilePage() {
                   <div className="flex gap-3 pt-2">
                     <Button
                       type="submit"
-                      className="flex-1 bg-linear-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
+                      variant='primary'
+                      className="flex-1"
                     >
                       <Save className="h-4 w-4 mr-2" />
                       Save Changes
@@ -256,9 +275,6 @@ export default function ProfilePage() {
             <div className="bg-white rounded-2xl shadow-lg p-8">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-purple-100 rounded-lg">
-                    <Lock className="h-5 w-5 text-purple-600" />
-                  </div>
                   <h3 className="text-xl font-semibold text-slate-800">
                     Password & Security
                   </h3>
@@ -284,6 +300,7 @@ export default function ProfilePage() {
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
                       <Input
                         id="currentPassword"
+                        minLength={8}
                         type="password"
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
@@ -300,6 +317,7 @@ export default function ProfilePage() {
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
                       <Input
                         id="newPassword"
+                        minLength={8}
                         type="password"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
@@ -318,6 +336,7 @@ export default function ProfilePage() {
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
                       <Input
                         id="confirmPassword"
+                        minLength={8}
                         type="password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
@@ -331,7 +350,8 @@ export default function ProfilePage() {
                   <div className="flex gap-3 pt-2">
                     <Button
                       type="submit"
-                      className="flex-1 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                      variant="primary"
+                      className="flex-1"
                     >
                       <Save className="h-4 w-4 mr-2" />
                       Update Password
@@ -465,11 +485,10 @@ export default function ProfilePage() {
 
                             <div className="flex items-center gap-2">
                               <span
-                                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                  booking.paid
-                                    ? "bg-green-100 text-green-800"
-                                    : "bg-yellow-100 text-yellow-800"
-                                }`}
+                                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${booking.paid
+                                  ? "bg-green-100 text-green-800"
+                                  : "bg-yellow-100 text-yellow-800"
+                                  }`}
                               >
                                 {booking.paid ? "✓ Paid" : "Pending Payment"}
                               </span>

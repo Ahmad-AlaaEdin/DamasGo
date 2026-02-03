@@ -97,7 +97,7 @@ export default function ProfileImageUpload({
       setUploadStatus("error");
       setErrorMessage(
         error.response?.data?.message ||
-          "Failed to upload image. Please try again."
+        "Failed to upload image. Please try again."
       );
     } finally {
       setIsUploading(false);
@@ -120,18 +120,10 @@ export default function ProfileImageUpload({
 
   const getImageSrc = () => {
     if (previewUrl) return previewUrl;
-    if (
-      currentImageUrl &&
-      currentImageUrl !== "default.jpg" &&
-      currentImageUrl !== "/default.png"
-    ) {
-      return currentImageUrl.startsWith("http")
-        ? currentImageUrl
-        : `${
-            import.meta.env.VITE_API_URL || "http://localhost:3000"
-          }/img/users/${currentImageUrl}`;
+    if (currentImageUrl?.startsWith("http")) {
+      return currentImageUrl;
     }
-    return null;
+    return "/img/default.png";
   };
 
   const imageSrc = getImageSrc();
@@ -139,7 +131,7 @@ export default function ProfileImageUpload({
   return (
     <div className="flex flex-col items-center">
       <div className="relative mb-6">
-        <div className="w-32 h-32 rounded-full bg-linear-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white text-4xl font-bold shadow-xl">
+        <div className="w-32 h-32 rounded-full flex items-center justify-center text-white text-4xl font-bold shadow-xl border-2 border-brand-primary/50">
           {imageSrc ? (
             <img
               src={imageSrc}
