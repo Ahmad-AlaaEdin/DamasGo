@@ -15,6 +15,7 @@ type CookieOptions = {
   expires: Date;
   httpOnly: boolean;
   secure?: boolean;
+  sameSite?: 'lax' | 'strict' | 'none';
 };
 
 // JWT Configuration following Rule 3: readonly for config objects
@@ -65,7 +66,10 @@ const sendToken = (
     httpOnly: true,
   };
 
-  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+  if (process.env.NODE_ENV === 'production') {
+    cookieOptions.secure = true;
+    cookieOptions.sameSite = 'none';
+  }
 
   res.cookie('jwt', token, cookieOptions);
 
@@ -87,7 +91,6 @@ export const signup = catchAsync(
       password: req.body.password,
       passwordConfirm: req.body.passwordConfirm,
     });
-
 
     sendToken(newUser, 201, res);
   },

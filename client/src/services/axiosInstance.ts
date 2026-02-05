@@ -13,7 +13,7 @@ if (!baseURL.startsWith("http://") && !baseURL.startsWith("https://")) {
 
 const axiosInstance = axios.create({
   baseURL: `${baseURL}${baseURL.includes("/api/v1") ? "" : "/api/v1"}`,
-  timeout: 10000,
+  timeout: 30000,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",

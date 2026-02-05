@@ -29,6 +29,7 @@ const corsOptions = {
     'http://localhost:5173',
     'http://127.0.0.1:5173',
     'https://damas-go.vercel.app',
+    process.env.FRONTEND_URL || '',
   ],
   credentials: true,
   optionsSuccessStatus: 200,
@@ -91,7 +92,7 @@ app.use(compression());
 app.use(morgan('dev'));
 
 const limiterConfig = {
-  max: 100,
+  max: 1000,
   window: 60 * 60 * 1000,
   message: 'Too many requests from this IP, please try again in an hour',
 } as const;
